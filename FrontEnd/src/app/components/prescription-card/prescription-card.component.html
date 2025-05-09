@@ -1,0 +1,32 @@
+<mat-card class="prescription-card">
+  <mat-card-header>
+    <mat-card-title>{{ prescription.name }}</mat-card-title>
+    <mat-card-subtitle>{{ prescription.courseOfAction }}</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <p *ngIf="prescription.dosageInstructions"><strong>Dosage:</strong> {{ prescription.dosageInstructions }}</p>
+    <p *ngIf="prescription.duration"><strong>Duration:</strong> {{ prescription.duration }}</p>
+
+    <div class="medications" [class.expanded]="isExpanded">
+      <div class="medications-header">
+        <h3>Medications ({{ prescription.medications.length }})</h3>
+        <button mat-button color="primary" (click)="toggleExpand()">
+          <mat-icon>{{ isExpanded ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</mat-icon>
+          {{ isExpanded ? 'HIDE' : 'VIEW' }}
+        </button>
+      </div>
+
+      <div class="medications-content" *ngIf="isExpanded">
+        <app-medication-detail *ngFor="let medication of prescription.medications" [medication]="medication"></app-medication-detail>
+      </div>
+
+      <div *ngIf="!isExpanded" class="medication-preview">
+        <span *ngFor="let medication of prescription.medications.slice(0, 3); let last = last">
+          {{ medication.name }}{{ !last ? ', ' : '' }}
+        </span>
+        <span *ngIf="prescription.medications.length > 3"> and {{ prescription.medications.length - 3 }} more</span>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

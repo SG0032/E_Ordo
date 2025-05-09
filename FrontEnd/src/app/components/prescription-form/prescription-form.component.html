@@ -1,0 +1,137 @@
+<div class="admin-container">
+  <mat-drawer-container class="admin-sidenav-container">
+    <mat-drawer mode="side" opened class="admin-sidenav">
+      <app-admin-nav></app-admin-nav>
+    </mat-drawer>
+
+    <mat-drawer-content class="admin-content">
+      <div class="admin-header">
+        <div class="header-title">
+          <h1>{{ isEdit ? 'Edit' : 'Add New' }} Prescription</h1>
+          <p>{{ isEdit ? 'Update the details of an existing prescription' : 'Create a new prescription in the system' }}</p>
+        </div>
+        <div class="header-actions">
+          <button mat-stroked-button routerLink="/admin/prescriptions">
+            <mat-icon>arrow_back</mat-icon> Return to List
+          </button>
+        </div>
+      </div>
+
+      <div class="loading-container" *ngIf="isLoading">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>{{ isEdit ? 'Loading prescription...' : 'Creating prescription...' }}</p>
+      </div>
+
+      <mat-card *ngIf="!isLoading">
+        <mat-card-content>
+          <form [formGroup]="prescriptionForm" (ngSubmit)="onSubmit()">
+            <div class="form-section">
+              <h3>Basic Information</h3>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Name</mat-label>
+                  <input matInput formControlName="name" placeholder="Enter prescription name">
+                  <mat-error *ngIf="prescriptionForm.get('name')?.hasError('required')">
+                    Name is required
+                  </mat-error>
+                  <mat-error *ngIf="prescriptionForm.get('name')?.hasError('maxlength')">
+                    Name cannot exceed 100 characters
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Associated Pathology</mat-label>
+                  <mat-select formControlName="pathologyId">
+                    <mat-option *ngFor="let pathology of pathologies" [value]="pathology.id">
+                      {{ pathology.name }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="prescriptionForm.get('pathologyId')?.hasError('required')">
+                    Pathology is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Course of Action</mat-label>
+                  <input matInput formControlName="courseOfAction" placeholder="Enter course of action">
+                  <mat-error *ngIf="prescriptionForm.get('courseOfAction')?.hasError('required')">
+                    Course of action is required
+                  </mat-error>
+                  <mat-error *ngIf="prescriptionForm.get('courseOfAction')?.hasError('maxlength')">
+                    Course of action cannot exceed 200 characters
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Dosage Instructions</mat-label>
+                  <textarea matInput formControlName="dosageInstructions" placeholder="Enter dosage instructions" rows="3"></textarea>
+                  <mat-error *ngIf="prescriptionForm.get('dosageInstructions')?.hasError('maxlength')">
+                    Dosage instructions cannot exceed 500 characters
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Duration</mat-label>
+                  <input matInput formControlName="duration" placeholder="Enter treatment duration">
+                  <mat-error *ngIf="prescriptionForm.get('duration')?.hasError('maxlength')">
+                    Duration cannot exceed 100 characters
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <div class="section-header">
+                <h3>Medications</h3>
+                <button type="button" mat-mini-fab color="primary" (click)="addMedication()" matTooltip="Add Medication">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+
+              <div class="medications-list" formArrayName="medications">
+                <div *ngIf="medicationsFormArray.length === 0" class="no-medications">
+                  No medications added. Click the "+" button to add medications.
+                </div>
+
+                <div *ngFor="let medicationGroup of medicationsFormArray.controls; let i = index" class="medication-item" [formGroupName]="i">
+                  <mat-form-field appearance="outline">
+                    <mat-label>Medication</mat-label>
+                    <input type="text" matInput formControlName="id" [matAutocomplete]="auto">
+                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayMedication.bind(this)">
+                      <mat-option *ngFor="let medication of filteredMedications[i] | async" [value]="medication.id">
+                        {{ medication.name }} ({{ medication.molecule }})
+
+                      </mat-option>
+                    </mat-autocomplete>
+                    <mat-error *ngIf="medicationsFormArray.at(i).get('id')?.hasError('required')">
+                      Medication is required
+                    </mat-error>
+                    <button mat-icon-button matSuffix color="warn" type="button" (click)="removeMedication(i)" matTooltip="Remove Medication">
+                      <mat-icon>close</mat-icon>
+                    </button>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" mat-stroked-button routerLink="/admin/prescriptions">Cancel</button>
+              <button type="submit" mat-raised-button color="primary" [disabled]="prescriptionForm.invalid">
+                {{ isEdit ? 'Update' : 'Create' }} Prescription
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </mat-drawer-content>
+  </mat-drawer-container>
+</div>

@@ -1,0 +1,36 @@
+<div class="medication-detail-card">
+  <div class="medication-header">
+    <h3>{{ medication.name }}</h3>
+    <span class="molecule-badge">{{ medication.molecule }}</span>
+  </div>
+
+  <div class="medication-content">
+    <div class="detail-row">
+      <!--<span class="detail-label">Posologie:</span>-->
+      <span class="detail-value">{{ medication.posologie }}</span>
+    </div>
+
+
+    <div class="info-panels">
+      <div class="info-panel" *ngIf="medication.infosMedicament">
+        <div class="panel-header" [class.active]="isPanelOpen.medicationInfo" (click)="togglePanel('medicationInfo')">
+          <span>Medication Information</span>
+          <mat-icon>{{ isPanelOpen.medicationInfo ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</mat-icon>
+        </div>
+        <div class="panel-content" [class.open]="isPanelOpen.medicationInfo">
+          <p>{{ medication.infosMedicament }}</p>
+        </div>
+      </div>
+
+      <div class="info-panel" *ngIf="medication.infosMolecule">
+        <div class="panel-header" [class.active]="isPanelOpen.moleculeInfo" (click)="togglePanel('moleculeInfo')">
+          <span>Molecule Information</span>
+          <mat-icon>{{ isPanelOpen.moleculeInfo ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}</mat-icon>
+        </div>
+        <div class="panel-content" [class.open]="isPanelOpen.moleculeInfo">
+          <p>{{ medication.infosMolecule }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

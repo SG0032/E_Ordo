@@ -1,0 +1,152 @@
+.admin-container {
+  height: 100%;
+}
+
+.admin-sidenav-container {
+  height: 100%;
+}
+
+.admin-sidenav {
+  width: 250px;
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.admin-content {
+  padding: 24px;
+  background-color: #f8f9fa;
+}
+
+.admin-header {
+  margin-bottom: 32px;
+
+  h1 {
+    color: var(--primary-dark);
+    margin: 0 0 8px 0;
+    font-size: 28px;
+    font-weight: 500;
+  }
+
+  p {
+    color: var(--text-secondary);
+    margin: 0;
+    font-size: 16px;
+  }
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+
+  p {
+    margin-top: 16px;
+    color: var(--text-secondary);
+  }
+}
+
+.dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.stat-card {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  }
+
+  mat-card-content {
+    display: flex;
+    align-items: center;
+    padding: 24px;
+  }
+
+  mat-card-actions {
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    padding: 12px;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.stat-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16px;
+
+  mat-icon {
+    font-size: 32px;
+    height: 32px;
+    width: 32px;
+    color: white;
+  }
+
+  &.medications {
+    background: linear-gradient(135deg, #5c6bc0, #3949ab);
+  }
+
+  &.pathologies {
+    background: linear-gradient(135deg, #26a69a, #00897b);
+  }
+
+  &.prescriptions {
+    background: linear-gradient(135deg, #7e57c2, #5e35b1);
+  }
+
+  &.guidelines {
+    background: linear-gradient(135deg, #ec407a, #d81b60);
+  }
+}
+
+.stat-details {
+  h2 {
+    font-size: 32px;
+    font-weight: 500;
+    margin: 0 0 4px 0;
+    color: var(--text-primary);
+  }
+
+  p {
+    font-size: 14px;
+    margin: 0;
+    color: var(--text-secondary);
+  }
+}
+
+.quick-actions {
+  background: white;
+  border-radius: 8px;
+  padding: 24px;
+
+  h2 {
+    margin: 0 0 16px 0;
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+}
+
+.action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+
+  a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}

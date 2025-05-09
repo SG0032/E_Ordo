@@ -1,0 +1,99 @@
+<div class="admin-container">
+  <mat-drawer-container class="admin-sidenav-container">
+    <mat-drawer mode="side" opened class="admin-sidenav">
+      <app-admin-nav></app-admin-nav>
+    </mat-drawer>
+
+    <mat-drawer-content class="admin-content">
+      <div class="admin-header">
+        <h1>Admin Dashboard</h1>
+        <p>Manage your prescription system data</p>
+      </div>
+
+      <div class="loading-container" *ngIf="isLoading">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>Loading dashboard statistics...</p>
+      </div>
+
+      <div class="dashboard-cards" *ngIf="statistics$ | async as stats">
+        <mat-card class="stat-card">
+          <mat-card-content>
+            <div class="stat-icon medications">
+              <mat-icon>medication</mat-icon>
+            </div>
+            <div class="stat-details">
+              <h2>{{ stats.medications }}</h2>
+              <p>Medications</p>
+            </div>
+          </mat-card-content>
+          <mat-card-actions>
+            <a mat-button color="primary" routerLink="/admin/medications">MANAGE</a>
+          </mat-card-actions>
+        </mat-card>
+
+        <mat-card class="stat-card">
+          <mat-card-content>
+            <div class="stat-icon pathologies">
+              <mat-icon>sick</mat-icon>
+            </div>
+            <div class="stat-details">
+              <h2>{{ stats.pathologies }}</h2>
+              <p>Pathologies</p>
+            </div>
+          </mat-card-content>
+          <mat-card-actions>
+            <a mat-button color="primary" routerLink="/admin/pathologies">MANAGE</a>
+          </mat-card-actions>
+        </mat-card>
+
+        <mat-card class="stat-card">
+          <mat-card-content>
+            <div class="stat-icon prescriptions">
+              <mat-icon>receipt</mat-icon>
+            </div>
+            <div class="stat-details">
+              <h2>{{ stats.prescriptions }}</h2>
+              <p>Prescriptions</p>
+            </div>
+          </mat-card-content>
+          <mat-card-actions>
+            <a mat-button color="primary" routerLink="/admin/prescriptions">MANAGE</a>
+          </mat-card-actions>
+        </mat-card>
+
+        <mat-card class="stat-card">
+          <mat-card-content>
+            <div class="stat-icon guidelines">
+              <mat-icon>menu_book</mat-icon>
+            </div>
+            <div class="stat-details">
+              <h2>{{ stats.guidelines }}</h2>
+              <p>Guidelines</p>
+            </div>
+          </mat-card-content>
+          <mat-card-actions>
+            <a mat-button color="primary" routerLink="/admin/guidelines">MANAGE</a>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+
+      <div class="quick-actions">
+        <h2>Quick Actions</h2>
+        <div class="action-buttons">
+          <a mat-raised-button color="primary" routerLink="/admin/medications/new">
+            <mat-icon>add</mat-icon> Add Medication
+          </a>
+          <a mat-raised-button color="primary" routerLink="/admin/pathologies/new">
+            <mat-icon>add</mat-icon> Add Pathology
+          </a>
+          <a mat-raised-button color="primary" routerLink="/admin/prescriptions/new">
+            <mat-icon>add</mat-icon> Add Prescription
+          </a>
+          <a mat-raised-button color="primary" routerLink="/admin/guidelines/new">
+            <mat-icon>add</mat-icon> Add Guideline
+          </a>
+        </div>
+      </div>
+    </mat-drawer-content>
+  </mat-drawer-container>
+</div>

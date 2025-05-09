@@ -1,0 +1,108 @@
+<div class="admin-container">
+  <mat-drawer-container class="admin-sidenav-container">
+    <mat-drawer mode="side" opened class="admin-sidenav">
+      <app-admin-nav></app-admin-nav>
+    </mat-drawer>
+
+    <mat-drawer-content class="admin-content">
+      <div class="admin-header">
+        <div class="header-title">
+          <h1>{{ isEdit ? 'Edit' : 'Add New' }} Medication</h1>
+          <p>{{ isEdit ? 'Update the details of an existing medication' : 'Create a new medication in the system' }}</p>
+        </div>
+        <div class="header-actions">
+          <button mat-stroked-button routerLink="/admin/medications">
+            <mat-icon>arrow_back</mat-icon> Return to List
+          </button>
+        </div>
+      </div>
+
+      <div class="loading-container" *ngIf="isLoading">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>{{ isEdit ? 'Loading medication...' : 'Creating medication...' }}</p>
+      </div>
+
+      <mat-card *ngIf="!isLoading">
+        <mat-card-content>
+          <form [formGroup]="medicationForm" (ngSubmit)="onSubmit()">
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Name</mat-label>
+                <input matInput formControlName="name" placeholder="Enter medication name">
+                <mat-error *ngIf="medicationForm.get('name')?.hasError('required')">
+                  Name is required
+                </mat-error>
+                <mat-error *ngIf="medicationForm.get('name')?.hasError('maxlength')">
+                  Name cannot exceed 100 characters
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Molecule</mat-label>
+                <input matInput formControlName="molecule" placeholder="Enter active molecule">
+                <mat-error *ngIf="medicationForm.get('molecule')?.hasError('required')">
+                  Molecule is required
+                </mat-error>
+                <mat-error *ngIf="medicationForm.get('molecule')?.hasError('maxlength')">
+                  Molecule cannot exceed 100 characters
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Posologie</mat-label>
+                <input matInput formControlName="posologie" placeholder="Enter dosage instructions">
+                <mat-error *ngIf="medicationForm.get('posologie')?.hasError('required')">
+                  Posologie is required
+                </mat-error>
+                <mat-error *ngIf="medicationForm.get('posologie')?.hasError('maxlength')">
+                  Posologie cannot exceed 200 characters
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Manufacturer</mat-label>
+                <input matInput formControlName="manufacturer" placeholder="Enter manufacturer name">
+                <mat-error *ngIf="medicationForm.get('manufacturer')?.hasError('maxlength')">
+                  Manufacturer cannot exceed 100 characters
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Medication Information</mat-label>
+                <textarea matInput formControlName="infosMedicament" placeholder="Enter detailed information about the medication" rows="5"></textarea>
+                <mat-error *ngIf="medicationForm.get('infosMedicament')?.hasError('maxlength')">
+                  Information cannot exceed 2000 characters
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Molecule Information</mat-label>
+                <textarea matInput formControlName="infosMolecule" placeholder="Enter detailed information about the molecule" rows="5"></textarea>
+                <mat-error *ngIf="medicationForm.get('infosMolecule')?.hasError('maxlength')">
+                  Information cannot exceed 2000 characters
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" mat-stroked-button routerLink="/admin/medications">Cancel</button>
+              <button type="submit" mat-raised-button color="primary" [disabled]="medicationForm.invalid">
+                {{ isEdit ? 'Update' : 'Create' }} Medication
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </mat-drawer-content>
+  </mat-drawer-container>
+</div>

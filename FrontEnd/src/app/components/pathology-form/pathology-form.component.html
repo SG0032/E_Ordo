@@ -1,0 +1,78 @@
+<div class="admin-container">
+  <mat-drawer-container class="admin-sidenav-container">
+    <mat-drawer mode="side" opened class="admin-sidenav">
+      <app-admin-nav></app-admin-nav>
+    </mat-drawer>
+
+    <mat-drawer-content class="admin-content">
+      <div class="admin-header">
+        <div class="header-title">
+          <h1>{{ isEdit ? 'Edit' : 'Add New' }} Pathology</h1>
+          <p>{{ isEdit ? 'Update the details of an existing pathology' : 'Create a new pathology in the system' }}</p>
+        </div>
+        <div class="header-actions">
+          <button mat-stroked-button routerLink="/admin/pathologies">
+            <mat-icon>arrow_back</mat-icon> Return to List
+          </button>
+        </div>
+      </div>
+
+      <div class="loading-container" *ngIf="isLoading">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>{{ isEdit ? 'Loading pathology...' : 'Creating pathology...' }}</p>
+      </div>
+
+      <mat-card *ngIf="!isLoading">
+        <mat-card-content>
+          <form [formGroup]="pathologyForm" (ngSubmit)="onSubmit()">
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Name</mat-label>
+                <input matInput formControlName="name" placeholder="Enter pathology name">
+                <mat-error *ngIf="pathologyForm.get('name')?.hasError('required')">
+                  Name is required
+                </mat-error>
+                <mat-error *ngIf="pathologyForm.get('name')?.hasError('maxlength')">
+                  Name cannot exceed 100 characters
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>ICD Code</mat-label>
+                <input matInput formControlName="icdCode" placeholder="Enter ICD code">
+                <mat-error *ngIf="pathologyForm.get('icdCode')?.hasError('required')">
+                  ICD code is required
+                </mat-error>
+                <mat-error *ngIf="pathologyForm.get('icdCode')?.hasError('maxlength')">
+                  ICD code cannot exceed 20 characters
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Description</mat-label>
+                <textarea matInput formControlName="description" placeholder="Enter detailed description" rows="5"></textarea>
+                <mat-error *ngIf="pathologyForm.get('description')?.hasError('required')">
+                  Description is required
+                </mat-error>
+                <mat-error *ngIf="pathologyForm.get('description')?.hasError('maxlength')">
+                  Description cannot exceed 2000 characters
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" mat-stroked-button routerLink="/admin/pathologies">Cancel</button>
+              <button type="submit" mat-raised-button color="primary" [disabled]="pathologyForm.invalid">
+                {{ isEdit ? 'Update' : 'Create' }} Pathology
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </mat-drawer-content>
+  </mat-drawer-container>
+</div>

@@ -1,0 +1,39 @@
+.guideline-card {
+  margin-bottom: var(--spacing-lg);
+  border-top: 4px solid var(--secondary-color);
+
+  .mat-card-title {
+    color: var(--primary-dark);
+    font-size: 1.3rem;
+    font-weight: 500;
+  }
+
+  .mat-card-subtitle {
+    color: var(--text-secondary);
+  }
+}
+
+.guideline-content {
+  line-height: 1.7;
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+
+  &.expanded {
+    margin-bottom: var(--spacing-md);
+  }
+}
+
+.source {
+  margin-top: var(--spacing-lg);
+  font-style: italic;
+  color: var(--text-secondary);
+  padding: var(--spacing-sm);
+  background-color: #f9f9f9;
+  border-radius: var(--border-radius);
+
+  strong {
+    color: var(--text-primary);
+  }
+}
+
+

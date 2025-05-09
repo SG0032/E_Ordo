@@ -1,0 +1,15 @@
+<mat-nav-list>
+  <h2 matSubheader>Admin Panel</h2>
+
+  <a mat-list-item *ngFor="let item of navItems" [routerLink]="item.route" routerLinkActive="active-link">
+    <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+    <span matListItemTitle>{{ item.label }}</span>
+  </a>
+
+  <mat-divider></mat-divider>
+
+  <a mat-list-item routerLink="/">
+    <mat-icon matListItemIcon>home</mat-icon>
+    <span matListItemTitle>Return to App</span>
+  </a>
+</mat-nav-list>

@@ -1,0 +1,123 @@
+<div class="admin-container">
+  <mat-drawer-container class="admin-sidenav-container">
+    <mat-drawer mode="side" opened class="admin-sidenav">
+      <app-admin-nav></app-admin-nav>
+    </mat-drawer>
+
+    <mat-drawer-content class="admin-content">
+      <div class="admin-header">
+        <div class="header-title">
+          <h1>{{ isEdit ? 'Edit' : 'Add New' }} Guideline</h1>
+          <p>{{ isEdit ? 'Update the details of an existing guideline' : 'Create a new clinical guideline in the system' }}</p>
+        </div>
+        <div class="header-actions">
+          <button mat-stroked-button routerLink="/admin/guidelines">
+            <mat-icon>arrow_back</mat-icon> Return to List
+          </button>
+        </div>
+      </div>
+
+      <div class="loading-container" *ngIf="isLoading">
+        <mat-spinner diameter="40"></mat-spinner>
+        <p>{{ isEdit ? 'Loading guideline...' : 'Creating guideline...' }}</p>
+      </div>
+
+      <mat-card *ngIf="!isLoading">
+        <mat-card-content>
+          <form [formGroup]="guidelineForm" (ngSubmit)="onSubmit()">
+            <div class="form-section">
+              <h3>Basic Information</h3>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Title</mat-label>
+                  <input matInput formControlName="title" placeholder="Enter guideline title">
+                  <mat-error *ngIf="guidelineForm.get('title')?.hasError('required')">
+                    Title is required
+                  </mat-error>
+                  <mat-error *ngIf="guidelineForm.get('title')?.hasError('maxlength')">
+                    Title cannot exceed 200 characters
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Associated Pathology</mat-label>
+                  <mat-select formControlName="pathologyId">
+                    <mat-option *ngFor="let pathology of pathologies" [value]="pathology.id">
+                      {{ pathology.name }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="guidelineForm.get('pathologyId')?.hasError('required')">
+                    Pathology is required
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Summary</mat-label>
+                  <textarea matInput formControlName="summary" placeholder="Enter a short summary" rows="3"></textarea>
+                  <mat-error *ngIf="guidelineForm.get('summary')?.hasError('maxlength')">
+                    Summary cannot exceed 500 characters
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Content</mat-label>
+                  <textarea matInput formControlName="content" placeholder="Enter detailed guideline content" rows="10"></textarea>
+                  <mat-error *ngIf="guidelineForm.get('content')?.hasError('required')">
+                    Content is required
+                  </mat-error>
+                  <mat-error *ngIf="guidelineForm.get('content')?.hasError('maxlength')">
+                    Content cannot exceed 10000 characters
+                  </mat-error>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h3>Source Information</h3>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Source</mat-label>
+                  <input matInput formControlName="source" placeholder="Enter source name">
+                  <mat-error *ngIf="guidelineForm.get('source')?.hasError('maxlength')">
+                    Source cannot exceed 100 characters
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>URL</mat-label>
+                  <input matInput formControlName="url" placeholder="Enter source URL">
+                  <mat-error *ngIf="guidelineForm.get('url')?.hasError('pattern')">
+                    Please enter a valid URL
+                  </mat-error>
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline">
+                  <mat-label>Publish Date</mat-label>
+                </mat-form-field>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" mat-stroked-button routerLink="/admin/guidelines">Cancel</button>
+              <button type="submit" mat-raised-button color="primary" [disabled]="guidelineForm.invalid">
+                {{ isEdit ? 'Update' : 'Create' }} Guideline
+              </button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </mat-drawer-content>
+  </mat-drawer-container>
+</div>
