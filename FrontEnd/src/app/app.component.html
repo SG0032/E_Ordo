@@ -1,0 +1,43 @@
+<div class="app-container">
+  <mat-toolbar color="primary">
+    <div class="title-logo">
+      <mat-icon>medical_services</mat-icon>
+      <span>Prescription Manager</span>
+    </div>
+    <span class="spacer"></span>
+
+    <nav class="main-nav">
+      <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <mat-icon>search</mat-icon>
+        Search Pathologies
+      </a>
+      <a mat-button routerLink="/medications" routerLinkActive="active">
+        <mat-icon>medication</mat-icon>
+        Medications
+      </a>
+      <a mat-button routerLink="/admin" routerLinkActive="active">
+        <mat-icon>admin_panel_settings</mat-icon>
+        Admin Panel
+      </a>
+    </nav>
+
+    <button mat-icon-button aria-label="Help">
+      <mat-icon>help_outline</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <div class="content">
+    <router-outlet></router-outlet>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <p>&copy; 2025 Prescription Management System</p>
+      <div class="links">
+        <a href="#">About</a>
+        <a href="#">Contact</a>
+        <a href="#">Privacy Policy</a>
+      </div>
+    </div>
+  </footer>
+</div>

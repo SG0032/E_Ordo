@@ -1,0 +1,23 @@
+@import '../../admin/admin-styles';
+
+.description-cell {
+  max-width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chip-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  .medication-count {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  mat-chip-set {
+    margin-top: 4px;
+  }
+}

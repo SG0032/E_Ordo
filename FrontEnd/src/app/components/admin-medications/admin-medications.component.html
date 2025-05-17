@@ -1,0 +1,102 @@
+<div class="admin-container">
+  <mat-drawer-container class="admin-sidenav-container">
+    <mat-drawer mode="side" opened class="admin-sidenav">
+      <app-admin-nav></app-admin-nav>
+    </mat-drawer>
+
+    <mat-drawer-content class="admin-content">
+      <div class="admin-header">
+        <div class="header-title">
+          <h1>Manage Medications</h1>
+          <p>View, add, edit, and delete medications</p>
+        </div>
+        <div class="header-actions">
+          <a mat-raised-button color="primary" routerLink="/admin/medications/new">
+            <mat-icon>add</mat-icon> Add Medication
+          </a>
+        </div>
+      </div>
+
+      <mat-card>
+        <mat-card-content>
+          <div class="filter-container">
+            <mat-form-field appearance="outline">
+              <mat-label>Filter</mat-label>
+              <input matInput (keyup)="applyFilter($event)" placeholder="Search medications...">
+              <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="loading-shade" *ngIf="isLoading">
+            <mat-spinner diameter="40"></mat-spinner>
+            <p>Loading medications...</p>
+          </div>
+
+          <div class="table-container mat-elevation-z1">
+            <table mat-table [dataSource]="dataSource" matSort>
+
+              <!-- ID Column -->
+              <ng-container matColumnDef="id">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+                <td mat-cell *matCellDef="let medication"> {{medication.id}} </td>
+              </ng-container>
+
+              <!-- Name Column -->
+              <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+                <td mat-cell *matCellDef="let medication"> {{medication.name}} </td>
+              </ng-container>
+
+              <!-- Molecule Column -->
+              <ng-container matColumnDef="molecule">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Molecule </th>
+                <td mat-cell *matCellDef="let medication"> {{medication.molecule}} </td>
+              </ng-container>
+              <!-- Posologie Column -->
+              <ng-container matColumnDef="posologie">
+                <th mat-header-cell *matHeaderCellDef> Posologie </th>
+                <td mat-cell *matCellDef="let medication"> {{medication.posologie}} </td>
+              </ng-container>
+
+              <!-- Manufacturer Column -->
+              <ng-container matColumnDef="manufacturer">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Manufacturer </th>
+                <td mat-cell *matCellDef="let medication"> {{medication.manufacturer}} </td>
+              </ng-container>
+
+              <!-- Actions Column -->
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef> Actions </th>
+                <td mat-cell *matCellDef="let medication" class="action-buttons">
+                  <a mat-icon-button color="primary" [routerLink]="['/admin/medications/edit', medication.id]" matTooltip="Edit">
+                    <mat-icon>edit</mat-icon>
+                  </a>
+                  <button mat-icon-button color="warn" (click)="deleteMedication(medication.id)" matTooltip="Delete">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+              <!-- Row shown when there is no matching data. -->
+              <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell no-data" colspan="6">
+                  <ng-container *ngIf="dataSource?.filter; else noMedications">
+                    No medications matching "{{dataSource.filter}}"
+                  </ng-container>
+                  <ng-template #noMedications>
+                    No medications found
+                  </ng-template>
+                </td>
+              </tr>
+            </table>
+
+            <mat-paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons></mat-paginator>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </mat-drawer-content>
+  </mat-drawer-container>
+</div>

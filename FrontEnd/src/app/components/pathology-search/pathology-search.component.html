@@ -1,0 +1,37 @@
+
+<div class="search-container">
+  <h2>Système de gestion des ordonnances</h2>
+  <p>Trouvez rapidement l'ordonnance associée à une pathologie</p>
+
+  <div class="search-box">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Chercher les pathologies</mat-label>
+      <input matInput [formControl]="searchControl" placeholder="Saisissez au moins 2 caractères ">
+      <!-- <mat-icon matSuffix>Chercher</mat-icon>-->
+    </mat-form-field>
+
+    <div *ngIf="isLoading" class="loading">
+      <mat-spinner diameter="24"></mat-spinner>
+    </div>
+  </div>
+
+  <div class="results-container">
+    <mat-nav-list>
+      <mat-list-item *ngFor="let pathology of pathologies$ | async" (click)="viewPathologyDetails(pathology.id)">
+        <div class="pathology-item">
+          <h3>{{ pathology.name }}</h3>
+<!--          <p *ngIf="pathology.icdCode">Code ICD: {{ pathology.icdCode }}</p>
+          <p>{{ pathology.description }}</p>-->
+<!--          <div class="badges">
+            <span class="badge" *ngIf="pathology.hasGuidelines">Conduite à tenir disponible</span>
+          </div>-->
+        </div>
+        <mat-divider></mat-divider>
+      </mat-list-item>
+    </mat-nav-list>
+
+    <div *ngIf="(pathologies$ | async)?.length === 0 && searchControl.value && searchControl.value.length >= 2 && !isLoading" class="no-results">
+      <p>Aucune pathologie ne correspond à vos critères de recherche.</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,50 @@
+@import '../../admin/admin-styles';
+
+.form-section {
+  margin-bottom: 32px;
+
+  h3 {
+    margin: 0 0 16px 0;
+    color: var(--primary-dark);
+    font-size: 18px;
+    font-weight: 500;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+
+  h3 {
+    margin: 0;
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
+
+.medications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.no-medications {
+  padding: 16px;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.03);
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.medication-item {
+  display: flex;
+  align-items: center;
+
+  .mat-form-field {
+    flex: 1;
+  }
+}

@@ -1,0 +1,23 @@
+<mat-card class="guideline-card">
+  <mat-card-header>
+    <mat-card-title>{{ guideline.title }}</mat-card-title>
+    <mat-card-subtitle *ngIf="guideline.lastUpdated">Last Updated: {{ guideline.lastUpdated }}</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content [class.expanded]="isExpanded">
+    <div class="guideline-content" [innerHTML]="isExpanded ? guideline.content : (guideline.content | slice:0:300) + (guideline.content.length > 300 ? '...' : '')"></div>
+
+    <div *ngIf="guideline.source" class="source">
+      <strong>Source:</strong> {{ guideline.source }}
+    </div>
+  </mat-card-content>
+
+  <mat-card-actions *ngIf="guideline.content && guideline.content.length > 300">
+    <button mat-button color="primary" (click)="toggleExpand()">
+      {{ isExpanded ? 'SHOW LESS' : 'READ MORE' }}
+    </button>
+  </mat-card-actions>
+</mat-card>
+
+<!-- app.component.html -->
+
