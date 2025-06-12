@@ -1,6 +1,6 @@
 <div class="detail-container">
   <button mat-button class="back-button" routerLink="/">
-<!--    <mat-icon>arrow_back</mat-icon> -->Retour à la recherche
+    <mat-icon>arrow_back</mat-icon> Retour à la recherche
   </button>
 
   <div *ngIf="isLoading" class="loading-container">
@@ -15,25 +15,23 @@
       <p class="description">{{ result.pathology.description }}</p>
     </div>
 
-    <mat-divider></mat-divider>
-
-    <!-- Guidelines Section -->
-    <div *ngIf="result.guideline" class="guidelines-section">
-      <h2>Lignes directrices</h2>
-      <app-guideline-view [guideline]="result.guideline"></app-guideline-view>
-    </div>
-
     <!-- Prescriptions Section -->
     <div class="prescriptions-section">
       <h2>Ordonnances recommandées</h2>
 
-      <div *ngIf="result.prescriptions && result.prescriptions.length > 0" class="prescriptions-grid">
+      <div *ngIf="result.prescriptions && result.prescriptions.length > 0" class="prescriptions-list">
         <app-prescription-card *ngFor="let prescription of result.prescriptions" [prescription]="prescription"></app-prescription-card>
       </div>
 
       <div *ngIf="!result.prescriptions || result.prescriptions.length === 0" class="no-prescriptions">
         <p>Aucune ordonnance trouvée pour cette pathologie.</p>
       </div>
+    </div>
+
+    <!-- Guidelines Section -->
+    <div *ngIf="result.guideline" class="guidelines-section">
+      <h2>Lignes directrices</h2>
+      <app-guideline-view [guideline]="result.guideline"></app-guideline-view>
     </div>
   </ng-container>
 
