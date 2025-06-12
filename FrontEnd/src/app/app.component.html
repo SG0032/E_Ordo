@@ -1,5 +1,5 @@
 <div class="app-container">
-  <mat-toolbar color="primary">
+  <mat-toolbar color="primary" *ngIf="isLoggedIn()">
     <div class="title-logo">
       <mat-icon>medical_services</mat-icon>
       <span>Prescription Manager</span>
@@ -21,6 +21,52 @@
       </a>
     </nav>
 
+    <!-- User menu -->
+    <div class="user-menu" *ngIf="currentUser">
+      <span class="user-greeting">
+        Welcome, {{ getUserDisplayName() }}
+        <mat-icon class="user-type-icon" [title]="currentUser.userType">
+          {{ currentUser.userType === 'DOCTOR' ? 'local_hospital' : 'school' }}
+        </mat-icon>
+      </span>
+      <button mat-icon-button [matMenuTriggerFor]="userMenu">
+        <mat-icon>account_circle</mat-icon>
+      </button>
+      <mat-menu #userMenu="matMenu">
+        <button mat-menu-item disabled>
+          <mat-icon>person</mat-icon>
+          <span>{{ getUserDisplayName() }}</span>
+        </button>
+        <button mat-menu-item disabled>
+          <mat-icon>{{ currentUser.userType === 'DOCTOR' ? 'local_hospital' : 'school' }}</mat-icon>
+          <span>{{ currentUser.userType }}</span>
+        </button>
+        <mat-divider *ngIf="currentUser.userType === 'STUDENT'"></mat-divider>
+        <button mat-menu-item disabled *ngIf="currentUser.userType === 'STUDENT'">
+          <mat-icon>grade</mat-icon>
+          <span>Year {{ currentUser.yearOfStudy }}</span>
+        </button>
+        <button mat-menu-item disabled *ngIf="currentUser.userType === 'STUDENT'">
+          <mat-icon>subject</mat-icon>
+          <span>{{ currentUser.specialisation }}</span>
+        </button>
+        <div *ngIf="currentUser.userType === 'STUDENT'" class="verification-status">
+          <button mat-menu-item disabled>
+            <mat-icon [class]="'status-' + currentUser.verificationStatus?.toLowerCase()">
+              {{ currentUser.verificationStatus === 'APPROVED' ? 'verified' :
+              currentUser.verificationStatus === 'REJECTED' ? 'cancel' : 'pending' }}
+            </mat-icon>
+            <span>{{ currentUser.verificationStatus }}</span>
+          </button>
+        </div>
+        <mat-divider></mat-divider>
+        <button mat-menu-item (click)="logout()">
+          <mat-icon>logout</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
+    </div>
+
     <button mat-icon-button aria-label="Help">
       <mat-icon>help_outline</mat-icon>
     </button>
@@ -30,7 +76,7 @@
     <router-outlet></router-outlet>
   </div>
 
-  <footer>
+  <footer *ngIf="isLoggedIn()">
     <div class="footer-content">
       <p>&copy; 2025 Prescription Management System</p>
       <div class="links">
