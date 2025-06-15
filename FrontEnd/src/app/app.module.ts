@@ -4,7 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-// Angular Material
+// Angular Material - Complete imports
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -20,7 +20,14 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatPaginatorModule } from '@angular/material/paginator';
-
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 // Routing
 import { AppRoutingModule } from './app-routing.module';
@@ -32,6 +39,13 @@ import { PathologyDetailComponent } from './components/pathology-detail/patholog
 import { PrescriptionCardComponent } from './components/prescription-card/prescription-card.component';
 import { GuidelineViewComponent } from './components/guideline-view/guideline-view.component';
 import { MedicationDetailComponent } from './components/medication-detail/medication-detail.component';
+// LoginComponent and RegisterComponent are now standalone components
+
+// Services & Guards
+import { AuthService } from './services/auth.service';
+import { AuthGuard } from './guards/auth.guard';
+import { AdminGuard } from './guards/admin.guard';
+
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 @NgModule({
@@ -42,6 +56,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     PrescriptionCardComponent,
     GuidelineViewComponent,
     MedicationDetailComponent
+    // LoginComponent and RegisterComponent are now standalone
   ],
   imports: [
     BrowserModule,
@@ -50,6 +65,8 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     FormsModule,
     ReactiveFormsModule,
     AppRoutingModule,
+
+    // Material modules
     MatToolbarModule,
     MatButtonModule,
     MatInputModule,
@@ -64,10 +81,21 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
     MatChipsModule,
     MatExpansionModule,
     MatProgressBarModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatSnackBarModule,
+    MatMenuModule,
+    MatSortModule,
+    MatTableModule,
+    MatDialogModule,
+    MatAutocompleteModule
   ],
   providers: [
-    provideAnimationsAsync()
+    provideAnimationsAsync(),
+    AuthService,
+    AuthGuard,
+    AdminGuard
   ],
   bootstrap: [AppComponent]
 })
