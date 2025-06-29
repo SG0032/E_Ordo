@@ -1,6 +1,6 @@
 <mat-card class="prescription-card">
     <mat-card-header>
-        <mat-card-title>{{ prescription.name }}</mat-card-title>
+<!--        <mat-card-title>{{ prescription.name }}</mat-card-title>-->
         <mat-card-subtitle>{{ prescription.courseOfAction }}</mat-card-subtitle>
     </mat-card-header>
 
@@ -9,7 +9,6 @@
         <p *ngIf="prescription.duration"><strong>Duration:</strong> {{ prescription.duration }}</p>
 
         <div class="medications-list">
-            <h3>Medications</h3>
             <div class="medication-item" *ngFor="let medication of prescription.medications; let i = index">
                 <div class="medication-header">
                     <span class="medication-number">{{ i + 1 }}.</span>
