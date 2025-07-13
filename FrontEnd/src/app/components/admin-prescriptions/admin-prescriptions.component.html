@@ -44,32 +44,34 @@
               <!-- Name Column -->
               <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-                <td mat-cell *matCellDef="let prescription"> {{prescription.name}} </td>
+                <td mat-cell *matCellDef="let prescription"> {{prescription.name || 'N/A'}} </td>
               </ng-container>
 
               <!-- Pathology Column -->
               <ng-container matColumnDef="pathologyName">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Pathology </th>
-                <td mat-cell *matCellDef="let prescription"> {{prescription.pathologyName}} </td>
+                <td mat-cell *matCellDef="let prescription"> {{prescription.pathologyName || 'N/A'}} </td>
               </ng-container>
 
-              <!-- Course of Action Column -->
+              <!-- Course of Action Column - FIXED -->
               <ng-container matColumnDef="courseOfAction">
                 <th mat-header-cell *matHeaderCellDef> Course of Action </th>
                 <td mat-cell *matCellDef="let prescription" class="description-cell">
-                  {{prescription.courseOfAction}}
+                  {{prescription.courseOfAction || 'N/A'}}
                 </td>
               </ng-container>
 
-              <!-- Medications Column -->
+              <!-- Medications Column - FIXED -->
               <ng-container matColumnDef="medications">
                 <th mat-header-cell *matHeaderCellDef> Medications </th>
                 <td mat-cell *matCellDef="let prescription">
                   <div class="chip-list">
-                    <span class="medication-count">{{prescription.medications.length}} medications</span>
-                    <mat-chip-set>
+                    <span class="medication-count">
+                      {{prescription.medications?.length || 0}} medications
+                    </span>
+                    <mat-chip-set *ngIf="prescription.medications && prescription.medications.length > 0">
                       <mat-chip *ngFor="let med of prescription.medications.slice(0, 2)">
-                        {{med.name}}
+                        {{med.name || 'Unknown'}}
                       </mat-chip>
                       <mat-chip *ngIf="prescription.medications.length > 2">
                         +{{prescription.medications.length - 2}} more
