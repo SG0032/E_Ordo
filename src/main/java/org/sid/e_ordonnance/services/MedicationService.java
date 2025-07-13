@@ -20,6 +20,7 @@ public class MedicationService {
         List<Medication> medications = medicationRepository.findAll();
         return medications.stream()
                 .map(this::convertToDTO)
+                .sorted((m1, m2) -> m1.getName().compareToIgnoreCase(m2.getName()))
                 .collect(Collectors.toList());
     }
 

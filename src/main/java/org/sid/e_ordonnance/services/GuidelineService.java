@@ -26,6 +26,7 @@ public class GuidelineService {
         List<Guideline> guidelines = guidelineRepository.findAll();
         return guidelines.stream()
                 .map(this::convertToDTO)
+                .sorted((g1, g2) -> g1.getTitle().compareToIgnoreCase(g2.getTitle()))
                 .collect(Collectors.toList());
     }
 
@@ -39,12 +40,6 @@ public class GuidelineService {
                 .orElse(null);
     }
 
-    public List<GuidelineDTO> getGuidelinesByPathology(Long pathologyId) {
-        Optional<Guideline> guidelines = guidelineRepository.findByPathologyId(pathologyId);
-        return guidelines.stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
 
     @Transactional
     public GuidelineDTO createGuideline(GuidelineDTO guidelineDTO) {
