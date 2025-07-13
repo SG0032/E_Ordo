@@ -13,4 +13,16 @@ export class GuidelineViewComponent {
   toggleExpand(): void {
     this.isExpanded = !this.isExpanded;
   }
+
+  getPreviewContent(): string {
+    if (!this.guideline.content) {
+      return '';
+    }
+
+    if (this.guideline.content.length <= 300) {
+      return this.guideline.content;
+    }
+
+    return this.guideline.content.slice(0, 300) + '...';
+  }
 }

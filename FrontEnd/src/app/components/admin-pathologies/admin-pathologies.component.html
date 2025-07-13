@@ -44,20 +44,25 @@
               <!-- Name Column -->
               <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-                <td mat-cell *matCellDef="let pathology"> {{pathology.name}} </td>
+                <td mat-cell *matCellDef="let pathology"> {{pathology.name || 'N/A'}} </td>
               </ng-container>
 
               <!-- ICD Code Column -->
               <ng-container matColumnDef="icdCode">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header> ICD Code </th>
-                <td mat-cell *matCellDef="let pathology"> {{pathology.icdCode}} </td>
+                <td mat-cell *matCellDef="let pathology"> {{pathology.icdCode || 'N/A'}} </td>
               </ng-container>
 
-              <!-- Description Column -->
+              <!-- Description Column - FIXED -->
               <ng-container matColumnDef="description">
                 <th mat-header-cell *matHeaderCellDef> Description </th>
                 <td mat-cell *matCellDef="let pathology" class="description-cell">
-                  {{pathology.description | slice:0:100}}{{pathology.description.length > 100 ? '...' : ''}}
+                  <ng-container *ngIf="pathology.description">
+                    {{pathology.description | slice:0:100}}{{pathology.description.length > 100 ? '...' : ''}}
+                  </ng-container>
+                  <ng-container *ngIf="!pathology.description">
+                    <span class="no-description">No description available</span>
+                  </ng-container>
                 </td>
               </ng-container>
 

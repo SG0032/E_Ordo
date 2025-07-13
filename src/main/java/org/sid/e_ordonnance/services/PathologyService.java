@@ -29,6 +29,7 @@ public class PathologyService {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
+
     public Long getPathologiesCount() {
         return pathologyRepository.count();
     }
@@ -67,25 +68,27 @@ public class PathologyService {
     }
 
     private void updatePathologyFields(Pathology pathology, PathologyDTO pathologyDTO) {
-        pathology.setName(pathologyDTO.getName());
-        pathology.setDescription(pathologyDTO.getDescription());
-        pathology.setIcdCode(pathologyDTO.getIcdCode());
+        pathology.setName(pathologyDTO.getName() != null ? pathologyDTO.getName() : "");
+        pathology.setDescription(pathologyDTO.getDescription() != null ? pathologyDTO.getDescription() : "");
+        pathology.setIcdCode(pathologyDTO.getIcdCode() != null ? pathologyDTO.getIcdCode() : "");
     }
 
     private PathologyDTO convertToDTO(Pathology pathology) {
         PathologyDTO dto = new PathologyDTO();
         dto.setId(pathology.getId());
-        dto.setName(pathology.getName());
-        dto.setDescription(pathology.getDescription());
-        dto.setIcdCode(pathology.getIcdCode());
+        dto.setName(pathology.getName() != null ? pathology.getName() : "");
+        dto.setDescription(pathology.getDescription() != null ? pathology.getDescription() : "");
+        dto.setIcdCode(pathology.getIcdCode() != null ? pathology.getIcdCode() : "");
+        // Check if this pathology has guidelines
+        dto.setHasGuidelines(pathology.getGuideline() != null);
         return dto;
     }
 
     private Pathology convertToEntity(PathologyDTO pathologyDTO) {
         Pathology pathology = new Pathology();
-        pathology.setName(pathologyDTO.getName());
-        pathology.setDescription(pathologyDTO.getDescription());
-        pathology.setIcdCode(pathologyDTO.getIcdCode());
+        pathology.setName(pathologyDTO.getName() != null ? pathologyDTO.getName() : "");
+        pathology.setDescription(pathologyDTO.getDescription() != null ? pathologyDTO.getDescription() : "");
+        pathology.setIcdCode(pathologyDTO.getIcdCode() != null ? pathologyDTO.getIcdCode() : "");
         return pathology;
     }
 }

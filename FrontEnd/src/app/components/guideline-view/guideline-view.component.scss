@@ -23,6 +23,15 @@
   }
 }
 
+.no-content {
+  padding: var(--spacing-lg);
+  text-align: center;
+  background-color: #f9f9f9;
+  border-radius: var(--border-radius);
+  color: var(--text-secondary);
+  font-style: italic;
+}
+
 .source {
   margin-top: var(--spacing-lg);
   font-style: italic;
@@ -35,5 +44,3 @@
     color: var(--text-primary);
   }
 }
-
-

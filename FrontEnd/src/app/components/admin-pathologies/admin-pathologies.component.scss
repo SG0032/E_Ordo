@@ -6,3 +6,9 @@
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.no-description {
+  color: var(--text-secondary);
+  font-style: italic;
+  opacity: 0.7;
+}
