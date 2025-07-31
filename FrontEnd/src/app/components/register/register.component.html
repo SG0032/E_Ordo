@@ -82,13 +82,35 @@
             <mat-form-field appearance="outline">
               <mat-label>I am a</mat-label>
               <mat-select formControlName="userType">
-                <mat-option [value]="userTypes.STUDENT">Student</mat-option>
-                <mat-option [value]="userTypes.DOCTOR">Doctor</mat-option>
+                <mat-option [value]="userTypes.STUDENT">
+                  <div class="user-type-option">
+                    <div class="option-title">{{ getUserTypeDisplayName(userTypes.STUDENT) }}</div>
+                    <div class="option-description">{{ getUserTypeDescription(userTypes.STUDENT) }}</div>
+                  </div>
+                </mat-option>
+                <mat-option [value]="userTypes.DOCTOR">
+                  <div class="user-type-option">
+                    <div class="option-title">{{ getUserTypeDisplayName(userTypes.DOCTOR) }}</div>
+                    <div class="option-description">{{ getUserTypeDescription(userTypes.DOCTOR) }}</div>
+                  </div>
+                </mat-option>
+                <mat-option [value]="userTypes.ADMIN">
+                  <div class="user-type-option">
+                    <div class="option-title">{{ getUserTypeDisplayName(userTypes.ADMIN) }}</div>
+                    <div class="option-description">{{ getUserTypeDescription(userTypes.ADMIN) }}</div>
+                  </div>
+                </mat-option>
               </mat-select>
               <mat-error *ngIf="registerForm.get('userType')?.hasError('required')">
                 Please select your account type
               </mat-error>
             </mat-form-field>
+          </div>
+
+          <!-- Role Description -->
+          <div class="role-info" *ngIf="registerForm.get('userType')?.value">
+            <mat-icon class="info-icon">info</mat-icon>
+            <p>{{ getUserTypeDescription(registerForm.get('userType')?.value) }}</p>
           </div>
         </div>
 
@@ -142,6 +164,24 @@
                 <p><mat-icon class="requirement-icon">info</mat-icon> Maximum size: 5MB</p>
                 <p><mat-icon class="requirement-icon">info</mat-icon> Ensure text is clearly readable</p>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Admin Notice -->
+        <div class="form-section admin-notice" *ngIf="registerForm.get('userType')?.value === userTypes.ADMIN">
+          <div class="notice-content">
+            <mat-icon class="warning-icon">warning</mat-icon>
+            <div class="notice-text">
+              <h4>Administrator Account</h4>
+              <p>You are creating an administrator account with full system access. This includes:</p>
+              <ul>
+                <li>User management and verification</li>
+                <li>System configuration</li>
+                <li>Data management (medications, pathologies, prescriptions)</li>
+                <li>Access to all administrative features</li>
+              </ul>
+              <p><strong>Note:</strong> Administrator accounts are auto-approved and do not require verification.</p>
             </div>
           </div>
         </div>

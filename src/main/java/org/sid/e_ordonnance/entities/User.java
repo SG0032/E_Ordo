@@ -52,10 +52,19 @@ public class User {
     }
 
     public enum UserType {
-        STUDENT, DOCTOR
+        STUDENT, DOCTOR, ADMIN
     }
 
     public enum VerificationStatus {
         PENDING, APPROVED, REJECTED
+    }
+
+    // Helper methods for role checking
+    public boolean isAdmin() {
+        return this.userType == UserType.ADMIN;
+    }
+
+    public boolean isNormalUser() {
+        return this.userType == UserType.STUDENT || this.userType == UserType.DOCTOR;
     }
 }

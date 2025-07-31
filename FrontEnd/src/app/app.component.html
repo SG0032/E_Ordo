@@ -2,20 +2,30 @@
   <mat-toolbar color="primary" *ngIf="isLoggedIn()">
     <div class="title-logo">
       <mat-icon>medical_services</mat-icon>
-      <span>Ordonnance.ma</span>
+      <span>Prescription Manager</span>
     </div>
     <span class="spacer"></span>
 
     <nav class="main-nav">
-      <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+      <!-- Search - Available to all authenticated users -->
+      <a mat-button routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+         *ngIf="canAccessSearch()">
         <mat-icon>search</mat-icon>
         Search Pathologies
       </a>
-      <a mat-button routerLink="/medications" routerLinkActive="active">
+
+      <!-- Medications - Only for ADMIN users -->
+      <a mat-button routerLink="/medications" routerLinkActive="active"
+         *ngIf="canAccessMedications()"
+         class="admin-nav-item">
         <mat-icon>medication</mat-icon>
         Medications
       </a>
-      <a mat-button routerLink="/admin" routerLinkActive="active">
+
+      <!-- Admin Panel - Only for ADMIN users -->
+      <a mat-button routerLink="/admin" routerLinkActive="active"
+         *ngIf="canAccessAdmin()"
+         class="admin-nav-item">
         <mat-icon>admin_panel_settings</mat-icon>
         Admin Panel
       </a>
@@ -25,9 +35,12 @@
     <div class="user-menu" *ngIf="currentUser">
       <span class="user-greeting">
         Welcome, {{ getUserDisplayName() }}
-        <mat-icon class="user-type-icon" [title]="currentUser.userType">
-          {{ currentUser.userType === 'DOCTOR' ? 'local_hospital' : 'school' }}
+        <mat-icon class="user-type-icon" [title]="getUserTypeDisplay()">
+          {{ getUserTypeIcon() }}
         </mat-icon>
+        <span class="user-role-badge" [class]="'role-' + currentUser.userType.toLowerCase()">
+          {{ getUserTypeDisplay() }}
+        </span>
       </span>
       <button mat-icon-button [matMenuTriggerFor]="userMenu">
         <mat-icon>account_circle</mat-icon>
@@ -38,19 +51,19 @@
           <span>{{ getUserDisplayName() }}</span>
         </button>
         <button mat-menu-item disabled>
-          <mat-icon>{{ currentUser.userType === 'DOCTOR' ? 'local_hospital' : 'school' }}</mat-icon>
-          <span>{{ currentUser.userType }}</span>
+          <mat-icon>{{ getUserTypeIcon() }}</mat-icon>
+          <span>{{ getUserTypeDisplay() }}</span>
         </button>
-        <mat-divider *ngIf="currentUser.userType === 'STUDENT'"></mat-divider>
-        <button mat-menu-item disabled *ngIf="currentUser.userType === 'STUDENT'">
+        <mat-divider *ngIf="currentUser.userType === UserType.STUDENT"></mat-divider>
+        <button mat-menu-item disabled *ngIf="currentUser.userType === UserType.STUDENT">
           <mat-icon>grade</mat-icon>
           <span>Year {{ currentUser.yearOfStudy }}</span>
         </button>
-        <button mat-menu-item disabled *ngIf="currentUser.userType === 'STUDENT'">
+        <button mat-menu-item disabled *ngIf="currentUser.userType === UserType.STUDENT">
           <mat-icon>subject</mat-icon>
           <span>{{ currentUser.specialisation }}</span>
         </button>
-        <div *ngIf="currentUser.userType === 'STUDENT'" class="verification-status">
+        <div *ngIf="currentUser.userType === UserType.STUDENT" class="verification-status">
           <button mat-menu-item disabled>
             <mat-icon [class]="'status-' + currentUser.verificationStatus?.toLowerCase()">
               {{ currentUser.verificationStatus === 'APPROVED' ? 'verified' :
@@ -60,6 +73,12 @@
           </button>
         </div>
         <mat-divider></mat-divider>
+        <!-- Admin-specific menu items -->
+        <button mat-menu-item *ngIf="isAdmin()" routerLink="/admin">
+          <mat-icon>admin_panel_settings</mat-icon>
+          <span>Admin Dashboard</span>
+        </button>
+        <mat-divider *ngIf="isAdmin()"></mat-divider>
         <button mat-menu-item (click)="logout()">
           <mat-icon>logout</mat-icon>
           <span>Logout</span>

@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { RegisterRequest, LoginRequest, LoginResponse, ApiResponse } from '../models/auth.model';
-import {User} from '../models/user.model';
+import { User, UserType, isAdmin, isNormalUser, canAccessAdmin } from '../models/user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -80,6 +80,41 @@ export class AuthService {
 
   isLoggedIn(): boolean {
     return this.getCurrentUser() !== null;
+  }
+
+  // Role-based authorization methods
+  isAdmin(): boolean {
+    return isAdmin(this.getCurrentUser());
+  }
+
+  isNormalUser(): boolean {
+    return isNormalUser(this.getCurrentUser());
+  }
+
+  canAccessAdmin(): boolean {
+    return canAccessAdmin(this.getCurrentUser());
+  }
+
+  hasRole(role: UserType): boolean {
+    const user = this.getCurrentUser();
+    return user?.userType === role;
+  }
+
+  // Check if user can access specific features
+  canAccessFeature(feature: 'admin' | 'search' | 'medications'): boolean {
+    const user = this.getCurrentUser();
+    if (!user) return false;
+
+    switch (feature) {
+      case 'search':
+        return true; // All authenticated users can access these
+      case 'admin':
+        return isAdmin(user);
+      case 'medications':
+        return isAdmin(user);
+      default:
+        return false;
+    }
   }
 
   uploadStudentCard(userId: number, file: File): Observable<ApiResponse> {
