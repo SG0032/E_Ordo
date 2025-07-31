@@ -209,4 +209,30 @@ export class RegisterComponent implements OnInit {
   getYearOptions(): number[] {
     return [1, 2, 3, 4, 5, 6, 7];
   }
+
+  getUserTypeDisplayName(userType: UserType): string {
+    switch (userType) {
+      case UserType.STUDENT:
+        return 'Student (Normal User)';
+      case UserType.DOCTOR:
+        return 'Doctor (Normal User)';
+      case UserType.ADMIN:
+        return 'Administrator';
+      default:
+        return userType;
+    }
+  }
+
+  getUserTypeDescription(userType: UserType): string {
+    switch (userType) {
+      case UserType.STUDENT:
+        return 'Access to search pathologies and view medical information';
+      case UserType.DOCTOR:
+        return 'Access to search pathologies and view medical information';
+      case UserType.ADMIN:
+        return 'Full administrative access including user management and system configuration';
+      default:
+        return '';
+    }
+  }
 }

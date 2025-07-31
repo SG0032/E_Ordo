@@ -56,16 +56,40 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setUserType(registerRequest.getUserType());
 
-        if (registerRequest.getUserType() == User.UserType.STUDENT) {
-            user.setYearOfStudy(registerRequest.getYearOfStudy());
-            user.setSpecialisation(registerRequest.getSpecialisation());
-            user.setVerificationStatus(User.VerificationStatus.PENDING);
-        } else {
-            user.setVerificationStatus(User.VerificationStatus.APPROVED); // Doctors are auto-approved
+        // Set verification status based on user type
+        switch (registerRequest.getUserType()) {
+            case STUDENT:
+                user.setYearOfStudy(registerRequest.getYearOfStudy());
+                user.setSpecialisation(registerRequest.getSpecialisation());
+                user.setVerificationStatus(User.VerificationStatus.PENDING);
+                break;
+            case DOCTOR:
+                user.setVerificationStatus(User.VerificationStatus.APPROVED); // Doctors are auto-approved
+                break;
+            case ADMIN:
+                user.setVerificationStatus(User.VerificationStatus.APPROVED); // Admins are auto-approved
+                break;
+            default:
+                user.setVerificationStatus(User.VerificationStatus.PENDING);
         }
 
         User savedUser = userRepository.save(user);
-        return new ApiResponseDTO(true, "Registration successful", convertToDTO(savedUser));
+
+        String message = getRegistrationMessage(savedUser.getUserType());
+        return new ApiResponseDTO(true, message, convertToDTO(savedUser));
+    }
+
+    private String getRegistrationMessage(User.UserType userType) {
+        switch (userType) {
+            case STUDENT:
+                return "Registration successful! Please upload your student card for verification.";
+            case DOCTOR:
+                return "Registration successful! Your account has been approved and you can now log in.";
+            case ADMIN:
+                return "Administrator account created successfully! You now have full system access.";
+            default:
+                return "Registration successful!";
+        }
     }
 
     public ApiResponseDTO login(LoginRequestDTO loginRequest) {
@@ -81,10 +105,21 @@ public class AuthService {
             return new ApiResponseDTO(false, "Invalid email or password");
         }
 
-        // Check if student account is verified
-        if (user.getUserType() == User.UserType.STUDENT &&
-                user.getVerificationStatus() != User.VerificationStatus.APPROVED) {
-            return new ApiResponseDTO(false, "Account pending verification. Please wait for admin approval.");
+        // Check verification status based on user type
+        switch (user.getUserType()) {
+            case STUDENT:
+                if (user.getVerificationStatus() != User.VerificationStatus.APPROVED) {
+                    return new ApiResponseDTO(false, "Student account pending verification. Please wait for admin approval.");
+                }
+                break;
+            case DOCTOR:
+            case ADMIN:
+                // Doctors and Admins are auto-approved, but double-check
+                if (user.getVerificationStatus() != User.VerificationStatus.APPROVED) {
+                    user.setVerificationStatus(User.VerificationStatus.APPROVED);
+                    userRepository.save(user);
+                }
+                break;
         }
 
         // Generate token (simplified - in production use JWT)
@@ -93,9 +128,22 @@ public class AuthService {
         LoginResponseDTO response = new LoginResponseDTO();
         response.setToken(token);
         response.setUser(convertToDTO(user));
-        response.setMessage("Login successful");
+        response.setMessage(getLoginMessage(user.getUserType()));
 
         return new ApiResponseDTO(true, "Login successful", response);
+    }
+
+    private String getLoginMessage(User.UserType userType) {
+        switch (userType) {
+            case ADMIN:
+                return "Welcome back, Administrator! You have full system access.";
+            case DOCTOR:
+                return "Welcome back, Doctor!";
+            case STUDENT:
+                return "Welcome back, Futur Doctor!";
+            default:
+                return "Login successful";
+        }
     }
 
     @Transactional
@@ -131,7 +179,7 @@ public class AuthService {
             user.setVerificationStatus(User.VerificationStatus.PENDING);
             userRepository.save(user);
 
-            return new ApiResponseDTO(true, "Student card uploaded successfully");
+            return new ApiResponseDTO(true, "Student card uploaded successfully. Please wait for verification.");
         } catch (IOException e) {
             return new ApiResponseDTO(false, "Failed to upload file: " + e.getMessage());
         }
@@ -159,10 +207,42 @@ public class AuthService {
         }
 
         User user = userOpt.get();
+
+        // Prevent changing admin verification status
+        if (user.getUserType() == User.UserType.ADMIN && status != User.VerificationStatus.APPROVED) {
+            return new ApiResponseDTO(false, "Administrator accounts cannot be rejected or set to pending");
+        }
+
         user.setVerificationStatus(status);
         userRepository.save(user);
 
-        return new ApiResponseDTO(true, "Verification status updated successfully");
+        String message = String.format("User verification status updated to %s", status.toString().toLowerCase());
+        return new ApiResponseDTO(true, message);
+    }
+
+    // Helper method to check if user has admin privileges
+    public boolean hasAdminPrivileges(String email) {
+        Optional<User> userOpt = userRepository.findByEmail(email);
+        return userOpt.isPresent() && userOpt.get().getUserType() == User.UserType.ADMIN;
+    }
+
+    // Method to get users by role
+    public List<UserDTO> getUsersByRole(User.UserType userType) {
+        return userRepository.findByUserType(userType)
+                .stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    // Get statistics for admin dashboard
+    public AdminStatsDTO getAdminStatistics() {
+        AdminStatsDTO stats = new AdminStatsDTO();
+        stats.setTotalUsers(userRepository.count());
+        stats.setTotalStudents((long) userRepository.findByUserType(User.UserType.STUDENT).size());
+        stats.setTotalDoctors((long) userRepository.findByUserType(User.UserType.DOCTOR).size());
+        stats.setTotalAdmins((long) userRepository.findByUserType(User.UserType.ADMIN).size());
+        stats.setPendingVerifications((long) userRepository.findByVerificationStatus(User.VerificationStatus.PENDING).size());
+        return stats;
     }
 
     private UserDTO convertToDTO(User user) {
@@ -181,7 +261,7 @@ public class AuthService {
     }
 
     private String generateToken(User user) {
-        // Simplified token generation - in production, use JWT
-        return "token_" + user.getId() + "_" + System.currentTimeMillis();
+        // Simplified token generation - in production, use JWT with role information
+        return "token_" + user.getId() + "_" + user.getUserType() + "_" + System.currentTimeMillis();
     }
 }

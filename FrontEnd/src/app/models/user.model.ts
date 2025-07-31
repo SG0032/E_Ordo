@@ -12,12 +12,26 @@ export interface User {
 }
 
 export enum UserType {
-  STUDENT = 'STUDENT',
-  DOCTOR = 'DOCTOR'
+  STUDENT = 'STUDENT',  // Normal User
+  DOCTOR = 'DOCTOR',    // Normal User
+  ADMIN = 'ADMIN'       // Admin User
 }
 
 export enum VerificationStatus {
   PENDING = 'PENDING',
   APPROVED = 'APPROVED',
   REJECTED = 'REJECTED'
+}
+
+
+export function isAdmin(user: User | null): boolean {
+  return user?.userType === UserType.ADMIN;
+}
+
+export function isNormalUser(user: User | null): boolean {
+  return user?.userType === UserType.STUDENT || user?.userType === UserType.DOCTOR;
+}
+
+export function canAccessAdmin(user: User | null): boolean {
+  return isAdmin(user);
 }

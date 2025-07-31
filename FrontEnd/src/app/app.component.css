@@ -31,9 +31,24 @@
     gap: var(--spacing-xs);
     padding: var(--spacing-xs) var(--spacing-sm);
     border-radius: 4px;
+    transition: background-color 0.2s;
 
     &.active {
       background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
+    }
+
+    /* Special styling for admin navigation */
+    &.admin-nav-item {
+      border: 1px solid rgba(255, 255, 255, 0.3);
+
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.2);
+        border-color: rgba(255, 255, 255, 0.5);
+      }
     }
 
     mat-icon {
@@ -62,6 +77,29 @@
       width: 16px;
       height: 16px;
       color: rgba(255, 255, 255, 0.7);
+    }
+
+    .user-role-badge {
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      margin-left: var(--spacing-xs);
+
+      &.role-admin {
+        background-color: #ff6b6b;
+        color: white;
+      }
+
+      &.role-doctor {
+        background-color: #4ecdc4;
+        color: white;
+      }
+
+      &.role-student {
+        background-color: #45b7d1;
+        color: white;
+      }
     }
   }
 }
@@ -118,6 +156,12 @@ footer {
   }
 }
 
+/* Access denied styling */
+.error-snackbar {
+  background-color: #f44336 !important;
+  color: white !important;
+}
+
 /* Mobile responsiveness */
 @media (max-width: 768px) {
   .main-nav {
@@ -125,7 +169,9 @@ footer {
   }
 
   .user-greeting {
-    display: none !important;
+    .user-role-badge {
+      display: none;
+    }
   }
 
   .footer-content {
