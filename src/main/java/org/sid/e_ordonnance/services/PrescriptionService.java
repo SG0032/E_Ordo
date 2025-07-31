@@ -25,13 +25,12 @@ public class PrescriptionService {
     @Autowired
     private PathologyRepository pathologyRepository;
 
-    @Autowired
-    private MedicationRepository medicationRepository;
 
     public List<PrescriptionDTO> getPrescriptionsByPathologyId(Long pathologyId) {
         List<Prescription> prescriptions = prescriptionRepository.findByPathologyId(pathologyId);
         return prescriptions.stream()
                 .map(this::convertToDTO)
+                .sorted((p1, p2) -> p1.getName().compareToIgnoreCase(p2.getName()))
                 .collect(Collectors.toList());
     }
 
@@ -69,6 +68,7 @@ public class PrescriptionService {
         List<Prescription> prescriptions = prescriptionRepository.findAll();
         return prescriptions.stream()
                 .map(this::convertToDTO)
+                .sorted((p1, p2) -> p1.getName().compareToIgnoreCase(p2.getName()))
                 .collect(Collectors.toList());
     }
 

@@ -20,6 +20,7 @@ public class PathologyService {
         List<Pathology> pathologies = pathologyRepository.findAll();
         return pathologies.stream()
                 .map(this::convertToDTO)
+                .sorted((p1, p2) -> p1.getName().compareToIgnoreCase(p2.getName()))
                 .collect(Collectors.toList());
     }
 
@@ -27,6 +28,7 @@ public class PathologyService {
         List<Pathology> pathologies = pathologyRepository.findByNameContainingIgnoreCase(term);
         return pathologies.stream()
                 .map(this::convertToDTO)
+                .sorted((p1, p2) -> p1.getName().compareToIgnoreCase(p2.getName()))
                 .collect(Collectors.toList());
     }
 

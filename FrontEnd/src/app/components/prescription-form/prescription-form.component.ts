@@ -5,7 +5,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 import { AdminService } from '../../services/admin.service';
-import { Prescription } from '../../models/prescription.model';
 import { Pathology } from '../../models/pathology.model';
 import { Medication } from '../../models/medication.model';
 
@@ -108,7 +107,7 @@ export class PrescriptionFormComponent implements OnInit {
   loadPathologies(): void {
     this.adminService.getAllPathologies().subscribe(
       (pathologies) => {
-        this.pathologies = pathologies;
+        this.pathologies = pathologies.sort((a, b) => a.name.localeCompare(b.name));
       },
       (error) => {
         console.error('Error loading pathologies', error);
@@ -120,7 +119,7 @@ export class PrescriptionFormComponent implements OnInit {
   loadMedications(): void {
     this.adminService.getAllMedications().subscribe(
       (medications) => {
-        this.medications = medications;
+        this.medications = medications.sort((a, b) => a.name.localeCompare(b.name));
       },
       (error) => {
         console.error('Error loading medications', error);

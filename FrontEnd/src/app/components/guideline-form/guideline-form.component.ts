@@ -52,7 +52,7 @@ export class GuidelineFormComponent implements OnInit {
   loadPathologies(): void {
     this.adminService.getAllPathologies().subscribe(
       (pathologies) => {
-        this.pathologies = pathologies;
+        this.pathologies = pathologies.sort((a, b) => a.name.localeCompare(b.name));
       },
       (error) => {
         console.error('Error loading pathologies', error);
